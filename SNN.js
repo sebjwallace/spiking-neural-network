@@ -16,6 +16,7 @@ SNN.prototype.init = function(){
   this.network.iterate(function(v,y,x){
     this.network.set(y,x,new Neuron(this.network,y,x))
   }.bind(this))
+  this.display.font({font:'10px Consolas', align: 'center'})
 }
 
 SNN.prototype.input = function(input){
@@ -23,6 +24,7 @@ SNN.prototype.input = function(input){
   for(var i = 0; i < this.inputs.length; i++){
     if(input == this.inputs[i]){
       this.network.get(0,i).potential = 1
+      this.render(i)
       this.step()
     }
   }
@@ -37,7 +39,6 @@ SNN.prototype.neuroGenesis = function(){
 
 SNN.prototype.step = function(){
 
-  this.display.clear()
   var hyperpolarized = new Matrix()
   var depolarized = new Matrix()
 
@@ -73,4 +74,12 @@ SNN.prototype.step = function(){
     }.bind(this))
   }.bind(this))
 
+}
+
+SNN.prototype.render = function(index){
+  this.display.clear()
+  for(var i = 0; i < this.inputs.length; i++){
+    this.display.textColor = i == index ? 'white' : 'gray'
+    this.display.text(this.inputs[i],i*8+4,7)
+  }
 }

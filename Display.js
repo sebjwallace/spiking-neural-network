@@ -7,6 +7,7 @@ function Display(id,h,w){
   this.ctx = null
   this.fillColor = 'black'
   this.strokeColor = 'black'
+  this.textColor = 'black'
 
   this.init()
 
@@ -32,6 +33,17 @@ Display.prototype.line = function(ax,ay,bx,by){
 Display.prototype.rect = function(x,y,h,w){
   this.ctx.fillStyle = this.fillColor
   this.ctx.fillRect(x,y,h,w)
+}
+
+Display.prototype.text = function(text,x,y){
+  this.ctx.fillStyle = this.textColor
+  this.ctx.fillText(text,x,y)
+}
+
+Display.prototype.font = function(args){
+  if(args.font) this.ctx.font = args.font
+  if(args.align) this.ctx.textAlign = args.align
+  if(args.color) this.textColor = args.color
 }
 
 Display.prototype.clear = function(){

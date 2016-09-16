@@ -34,7 +34,7 @@ Neuron.prototype.recover = function(){
 Neuron.prototype.propagate = function(){
   this.post.safeIterate(function(weight,y,x){
     var target = this.network.get(y,x)
-    if(target.potential < -0.40)
+    if(target.potential < -0.80)
       this.post.increment(y,x,-0.02)
     target.accumilate(weight,this.y,this.x)
   }.bind(this))
@@ -44,7 +44,7 @@ Neuron.prototype.propagate = function(){
 
 Neuron.prototype.backpropagate = function(){
   this.pre.safeIterate(function(v,y,x){
-    var delta = v > 0 ? 0.01 : -0.01
+    var delta = v > 0 ? 0.015 : -0.01
     this.network.get(y,x).moderate(delta,this.y,this.x)
     this.pre.set(y,x,0)
   }.bind(this))
@@ -59,7 +59,7 @@ Neuron.prototype.moderate = function(delta,y,x){
   var weight = this.post.get(y,x)
   if(delta < 0 && weight > 0)
     this.post.increment(y,x,delta)
-  if(delta > 0 && weight < 0.9)
+  if(delta > 0 && weight < 1)
     this.post.increment(y,x,delta)
   if(weight == 0)
     this.post.remove(y,x)
@@ -73,9 +73,9 @@ Neuron.prototype.isAlive = function(){
 Neuron.prototype.render = function(display){
   var scale = 8
   this.post.safeIterate(function(v,y,x){
-    display.strokeColor = this.potential >= 1 ? 'rgba(200,200,10,'+v+')' : 'rgba(20,200,20,'+v/2+')'
-    display.line(this.x*scale+(scale/2),this.y*scale+(scale/2),x*scale+(scale/2),y*scale+(scale/2))
+    display.strokeColor = this.potential >= 1 ? 'rgba(200,200,10,'+v+')' : 'rgba(20,200,20,'+v+')'
+    display.line(this.x*scale+(scale/2),this.y*scale+(scale/2)+10,x*scale+(scale/2),y*scale+(scale/2)+10)
   }.bind(this))
   display.fillColor = this.potential >= 1 ? 'rgba(255,255,255,1)' : 'rgba(180,80,40,'+this.potential+')'
-  display.rect(this.x*scale,this.y*scale,scale,scale)
+  display.rect(this.x*scale,this.y*scale+10,scale,scale)
 }
